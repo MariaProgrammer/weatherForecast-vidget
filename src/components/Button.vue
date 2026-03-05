@@ -28,6 +28,9 @@
   display: flex;
   gap: 9px;
   align-items: center;
+  width: 100%;
+
+
 }
 .button:hover {
    background: var(--gradient-inverted);
