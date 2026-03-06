@@ -1,7 +1,15 @@
-<script setup></script>
+<script setup>
+// const emit = defineEmits(['update:value'])
+// const props = defineProps(['value'])
+const model = defineModel()
+</script>
 
 <template>
-  <input type="text" class="input"/>
+  <!-- <input type="text" class="input"
+  :value="model"
+  @input="model=$event.target.value" /> -->
+  <input v-model="model" class="input"
+   />
 </template>
 
 <style scoped>
@@ -18,7 +26,12 @@
 .input::placeholder {
   color: var(--color-text-placeholder);
   font-weight: 400;
-  font-size: 18px;
-  
+  font-size: 18px;  
+}
+
+.input:focus {
+  outline: none;
+  border: 1px solid #586576;
+  background: var(--color-bg-card);
 }
 </style>
