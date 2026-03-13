@@ -28,6 +28,7 @@
   display: flex;
   gap: 9px;
   align-items: center;
+  justify-content: center;
   width: 100%;
 
 

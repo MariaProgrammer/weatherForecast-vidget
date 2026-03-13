@@ -22,6 +22,7 @@ const { label = "Не задано", stat } = defineProps({
   justify-content: space-between;
   font-size: 28px;
   gap: 16px;
+  margin-bottom: 10px;
 
 }
 .stat__name {

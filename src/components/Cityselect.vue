@@ -1,8 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import IconLocation from "./icons/IconLocation.vue";
 import Button from "./Button.vue";
 import Input from "./Input.vue";
+
+const API_ENDPOINT = 'https://api.gismeteo.net/v2/weather/forecast/'
+
 
 const emit = defineEmits({
   selectCity(payload) {
@@ -12,11 +15,26 @@ const emit = defineEmits({
 });
 
 let isEdited = ref(false);
-let city = ref('Moscow')
+let city = ref('Санкт-Петербург')
+
+onMounted(() => {
+  emit("selectCity", city.value);
+
+})
+// watch(city, (newValue, oldValue) => {
+//   console.log(`City old: ${oldValue}`)
+//   console.log(`City new: ${newValue}`)
+// })
+// watch(city, () => {
+//   console.log(city.value)
+//   onWatcherCleanup(() => {
+//     console.log('Cleanup')
+//   })
+// })
 
 function select() {
   isEdited.value = false;
-  emit("selectCity", "London");
+  emit("selectCity", city.value);
 }
 
 function edit() {
@@ -31,10 +49,10 @@ function edit() {
 
 <template>
   <div class="city-select">
-    {{ city }}
+    <!-- {{ city }} -->
      <div v-if="isEdited" class="city-input">
     <!-- <Input placeholder="Введите город" :value="city" @update:value="updateCity"/> -->
-    <Input placeholder="Введите город" v-model="city"/>
+    <Input placeholder="Введите город" v-model="city" @keydown.enter="select"/>
     <Button @click="select()"> Сохранить </Button>
   </div>
 
