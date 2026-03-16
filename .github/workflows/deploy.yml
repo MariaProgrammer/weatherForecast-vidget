@@ -1,0 +1,26 @@
+# Имя нашего "экшена" (отображается в GitHub)
+name: Build and Deploy
+
+# Триггер: запускать при пуше в ветку 'main'
+on:
+  push:
+    branches: [ "main" ]
+    
+# Задачи, которые нужно выполнить
+jobs:
+  build-and-deploy:
+    # ОС, на которой будет выполняться код
+    runs-on: ubuntu-latest
+    
+    # Шаги выполнения
+    steps:
+    # 1. Клонируем репозиторий в виртуальную машину
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+
+    # 2. Устанавливаем Node.js, собираем проект и деплоим
+    - name: Install, Build, and Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages # Ветка, куда будет публиковаться результат
+        folder: dist      # Папка, которую нужно опубликовать (результат npm run build)
