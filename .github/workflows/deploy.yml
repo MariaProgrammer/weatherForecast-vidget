@@ -1,26 +1,40 @@
-# Имя нашего "экшена" (отображается в GitHub)
-name: Build and Deploy
+# Имя воркфлоу
+name: Build and Deploy Vue App to GitHub Pages
 
-# Триггер: запускать при пуше в ветку 'main'
+# Запускать при пуше в ветку main
 on:
   push:
     branches: [ "main" ]
-    
-# Задачи, которые нужно выполнить
+
+# Разрешить этому воркфлоу создавать и писать в ветку gh-pages
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
-    # ОС, на которой будет выполняться код
     runs-on: ubuntu-latest
-    
-    # Шаги выполнения
     steps:
-    # 1. Клонируем репозиторий в виртуальную машину
-    - name: Checkout 🛎️
-      uses: actions/checkout@v3
+      # 1. Забираем код из репозитория
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
 
-    # 2. Устанавливаем Node.js, собираем проект и деплоим
-    - name: Install, Build, and Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        branch: gh-pages # Ветка, куда будет публиковаться результат
-        folder: dist      # Папка, которую нужно опубликовать (результат npm run build)
+      # 2. Устанавливаем Node.js
+      - name: Setup Node.js ⚙️
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3. Устанавливаем зависимости
+      - name: Install dependencies 📦
+        run: npm install
+
+      # 4. Собираем проект
+      - name: Build project 🔨
+        run: npm run build
+
+      # 5. Деплоим собранный проект в ветку gh-pages
+      - name: Deploy to GitHub Pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
