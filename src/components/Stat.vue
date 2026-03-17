@@ -37,4 +37,14 @@ const { label = "Не задано", stat } = defineProps({
   text-align: right;
 }
 
+@media (max-width: 768px) {
+  .stat {
+  
+  font-size: 22px;
+  gap: 12px;
+  margin-bottom: 10px;
+  }
+
+}
+
 </style>

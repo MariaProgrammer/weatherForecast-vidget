@@ -37,4 +37,10 @@ const model = defineModel()
   border: 1px solid #586576;
   background: var(--color-bg-card);
 }
+@media (max-width: 560px) {
+  .input {
+    width: 100%;
+  }
+
+}
 </style>

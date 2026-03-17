@@ -7,11 +7,12 @@ import DayCard from "./components/DayCard.vue";
 
 // --- НАСТРОЙКИ API ---
 const API_TOKEN = "UBUTEHUV7B9S5KDAVZU3WXWWE";
-const API_BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
+const API_BASE_URL =
+  "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
 
 // --- СОСТОЯНИЕ КОМПОНЕНТА ---
 const savedCity = ref("Санкт-Петербург");
-const error = ref('');
+const error = ref("");
 
 // Этот ref будет хранить данные для виджета СЕГОДНЯШНЕЙ погоды
 const todayData = ref({
@@ -20,6 +21,8 @@ const todayData = ref({
   wind: 0,
   pressure: 0,
 });
+
+let activeIndex = ref(0);
 
 // НОВЫЙ REF: Здесь мы будем хранить массив с прогнозом на 4 дня
 const forecastDays = ref([]);
@@ -50,28 +53,28 @@ const todayDataModified = computed(() => {
 async function getCity(cityName) {
   if (!cityName) return;
   savedCity.value = cityName;
-  
+
   // Запрос теперь на 5 дней, чтобы получить сегодня + 4 следующих
   const queryUrl = `${API_BASE_URL}${encodeURIComponent(cityName)}/next4days?unitGroup=metric&key=${API_TOKEN}&contentType=json`;
 
   try {
-    error.value = '';
+    error.value = "";
     const response = await fetch(queryUrl);
 
     if (!response.ok) {
       if (response.status === 400) {
-        throw new Error('Город не найден. Проверьте правильность написания.');
+        throw new Error("Город не найден. Проверьте правильность написания.");
       }
       throw new Error(`Ошибка сервера: ${response.status}. Попробуйте позже.`);
     }
 
     const weatherData = await response.json();
-    console.log('Полный ответ от сервера:', weatherData);
-    
+    console.log("Полный ответ от сервера:", weatherData);
+
     // 1. Обработка СЕГОДНЯШНЕГО дня (первый элемент массива)
     const currentConditions = weatherData.days[0];
     if (!currentConditions) {
-        throw new Error('Получены некорректные данные о погоде от сервера.');
+      throw new Error("Получены некорректные данные о погоде от сервера.");
     }
     todayData.value.humidity = currentConditions.humidity;
     todayData.value.precipitation = currentConditions.precip;
@@ -81,13 +84,12 @@ async function getCity(cityName) {
     // 2. ЗАПОЛНЯЕМ МАССИВ С ПРОГНОЗОМ НА СЛЕДУЮЩИЕ 4 ДНЯ
     // .slice(1, 5) берет элементы с 1-го по 4-й (индексы), то есть 4 дня, не включая сегодняшний
     forecastDays.value = weatherData.days.slice(0, 4);
-
   } catch (err) {
     console.error("Произошла ошибка при выполнении запроса:", err);
-    error.value = err.message.includes('Failed to fetch') 
-      ? 'Ошибка сети. Проверьте ваше подключение к интернету.' 
+    error.value = err.message.includes("Failed to fetch")
+      ? "Ошибка сети. Проверьте ваше подключение к интернету."
       : err.message;
-    
+
     // Сбрасываем все данные при ошибке
     todayData.value = { humidity: 0, precipitation: 0, wind: 0, pressure: 0 };
     forecastDays.value = [];
@@ -96,36 +98,35 @@ async function getCity(cityName) {
 
 // Загружаем погоду при первом запуске
 getCity(savedCity.value);
-
 </script>
-
 
 <template>
   <main class="main">
-    <ErrorComponent :error="error" />    
-    
+    <ErrorComponent :error="error" />
+
     <div id="city">{{ savedCity }}</div>
 
     <!-- Этот v-for выводит статы на СЕГОДНЯ -->
-    <Stat v-for="item in todayDataModified" v-bind="item" :key="item.label"/>    
+    <Stat v-for="item in todayDataModified" v-bind="item" :key="item.label" />
 
     <!-- ЗАМЕНЯЕМ СТАТИЧЕСКИЕ КАРТОЧКИ НА ДИНАМИЧЕСКИЙ ЦИКЛ v-for -->
     <div class="day-card__wrap">
-      <DayCard 
-        v-for="day in forecastDays" 
+      <DayCard
+        v-for="(day, i) in forecastDays"
         :key="day.datetime"
         :icon="day.icon"
         :temp="day.temp"
         :date="new Date(day.datetime)"
+        :is-active="activeIndex === i"
+        @click="() => (activeIndex = i)"
       />
     </div>
-    
+
     <Cityselect @select-city="getCity" />
   </main>
 </template>
 
 <style scoped>
-/* ... ваши стили ... */
 .main {
   background: var(--color-bg-main);
   padding: 50px 60px;
@@ -139,8 +140,43 @@ getCity(savedCity.value);
 }
 .day-card__wrap {
   display: flex;
+  width: 100%;
   gap: 15px; /* Увеличил отступ для красоты */
   margin-top: 90px;
   margin-bottom: 71px;
+}
+
+@media (max-width: 768px) {
+  .main {
+    /* Уменьшаем отступы */
+    padding: 35px 30px;
+    width: 100%;
+    height: auto;
+  }
+  #city {
+    font-size: 20px;
+  }
+  .day-card__wrap {
+    gap: 10px;
+    margin-top: 60px;
+    margin-bottom: 50px;
+  }
+}
+
+@media (max-width: 560px) {
+  .day-card__wrap {
+    gap: 8px;
+    margin-top: 30px;
+    margin-bottom: 25px;
+  }
+  /* Выбираем ПОСЛЕДНИЙ компонент DayCard внутри обертки и скрываем его */
+  .day-card__wrap :deep(.day-card:last-child) {
+    display: none;
+  }
+}
+@media (max-width: 360px) {
+  .main {
+    padding: 15px;
+  }
 }
 </style>

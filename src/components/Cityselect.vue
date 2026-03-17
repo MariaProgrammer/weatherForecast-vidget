@@ -70,5 +70,11 @@ function edit() {
   display: flex;
   gap: 12px;
 }
+@media (max-width: 560px) {
+  .city-input {
+    flex-direction: column;
+  }
+
+}
 
 </style>
