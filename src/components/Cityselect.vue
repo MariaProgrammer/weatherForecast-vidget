@@ -17,6 +17,8 @@ const emit = defineEmits({
 let isEdited = ref(false);
 let city = ref('Санкт-Петербург')
 
+
+
 onMounted(() => {
   emit("selectCity", city.value);
 
@@ -52,7 +54,7 @@ function edit() {
     <!-- {{ city }} -->
      <div v-if="isEdited" class="city-input">
     <!-- <Input placeholder="Введите город" :value="city" @update:value="updateCity"/> -->
-    <Input placeholder="Введите город" v-model="city" @keydown.enter="select"/>
+    <Input  v-model="city" v-focus placeholder="Введите город" @keydown.enter="select"/>
     <Button @click="select()"> Сохранить </Button>
   </div>
 
