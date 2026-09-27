@@ -1,5 +1,29 @@
-# Vue 3 + Vite
+# Виджет погоды ☀️
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Небольшое SPA на **Vue 3**: пользователь может найти город и посмотреть текущую погоду. Данные поступают из **Visual Crossing Weather API**.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+**[Открыть демо](https://mariaprogrammer.github.io/weatherForecast-vidget/)** · **[Посмотреть код](https://github.com/MariaProgrammer/weatherForecast-vidget)**
+
+## Возможности
+
+- Поиск погоды по городу.
+- Отображение текущей погоды для выбранного города.
+- Адаптивный интерфейс для разных размеров экрана.
+- Тесты с использованием Vitest.
+
+## Зачем я сделала этот проект
+
+Я разработала виджет как pet-проект, чтобы на практике поработать с Vue 3, запросами к внешнему REST API и тестированием. Проект показывает, как я организую небольшое клиентское приложение — от интерфейса и получения данных до сборки и публикации демо.
+
+## Стек
+
+- **Vue 3** — интерфейс приложения;
+- **JavaScript** — клиентская логика;
+- **Visual Crossing Weather API** — данные о погоде;
+- **Vite** — сборка и локальная разработка;
+- **Vitest** — тесты.
+
+## Ссылки
+
+- [Работающее приложение](https://mariaprogrammer.github.io/weatherForecast-vidget/)
+- [Исходный код](https://github.com/MariaProgrammer/weatherForecast-vidget)
